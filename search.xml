@@ -80,7 +80,11 @@
   <entry>
     <title>SC22:Scalable Irregular Parallelism with GPUs</title>
     <url>//post/SC22-Scalable-Irregular-Parallelism-with-GPUs.html</url>
-    <content><![CDATA[<h1 id="SC22-Scalable-Irregular-Parallelism-with-GPUs-Getting-CPUs-Out-of-the-Way"><a href="#SC22-Scalable-Irregular-Parallelism-with-GPUs-Getting-CPUs-Out-of-the-Way" class="headerlink" title="SC22: Scalable Irregular Parallelism with GPUs: Getting CPUs Out of the Way"></a>SC22: Scalable Irregular Parallelism with GPUs: Getting CPUs Out of the Way</h1><h2 id="主要工作"><a href="#主要工作" class="headerlink" title="主要工作"></a>主要工作</h2><p>提出了Atos框架, 可以动态调度多节点GPU系统, 支持节点内和节点间PGAS轻量级单边内存操作</p>
+    <content><![CDATA[<h1>SC22: Scalable Irregular Parallelism with GPUs: Getting CPUs Out of the Way</h1>
+<h2 id="背景知识">背景知识</h2>
+<p>在开始介绍本文的内容之前, 先进行一些扫盲</p>
+<h2 id="主要工作">主要工作</h2>
+<p>提出了Atos框架, 可以动态调度多节点GPU系统, 支持节点内和节点间PGAS轻量级单边内存操作</p>
 ]]></content>
       <categories>
         <category>知鱼集</category>
