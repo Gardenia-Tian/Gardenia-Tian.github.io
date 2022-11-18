@@ -81,6 +81,7 @@
     <title>SC22:Scalable Irregular Parallelism with GPUs</title>
     <url>//post/SC22-Scalable-Irregular-Parallelism-with-GPUs.html</url>
     <content><![CDATA[<h1 id="SC22-Scalable-Irregular-Parallelism-with-GPUs-Getting-CPUs-Out-of-the-Way"><a href="#SC22-Scalable-Irregular-Parallelism-with-GPUs-Getting-CPUs-Out-of-the-Way" class="headerlink" title="SC22: Scalable Irregular Parallelism with GPUs: Getting CPUs Out of the Way"></a>SC22: Scalable Irregular Parallelism with GPUs: Getting CPUs Out of the Way</h1><h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>在开始介绍本文的内容之前, 先进行一些扫盲, 介绍一下PGAS和单边内存操作</p>
+<h3 id="PGAS"><a href="#PGAS" class="headerlink" title="PGAS"></a>PGAS</h3><h3 id="One-sides-memory-operation"><a href="#One-sides-memory-operation" class="headerlink" title="One-sides memory operation"></a>One-sides memory operation</h3><h4 id="One-sides-communication"><a href="#One-sides-communication" class="headerlink" title="One-sides communication"></a>One-sides communication</h4><p>先来看一下单边通信. 用MPI在RMA中的运行模式为例, 传统的MPI通信方式是MPI_Send和MPI_Recv, 这种模式也被称为双边通信：两个进程隐式地彼此同步。发送方和接收方都是通信的参与者, Send和Recv必须要相互匹配, 这种模式可能会造成通信的死锁或者性能下降. 在RMA的支持下, MPI提供了执行远程内存访问（RMA）的例程，也称为单边通信．其中进程可以访问其他进程上的数据，只要它在特殊的内存窗口中可用。本内容参考<a href="https://enccs.github.io/intermediate-mpi/one-sided-concepts/">One-sided communication: concepts — Intermediate MPI (enccs.github.io)</a></p>
 <h2 id="主要工作"><a href="#主要工作" class="headerlink" title="主要工作"></a>主要工作</h2><p>提出了Atos框架, 可以动态调度多节点GPU系统, 支持节点内和节点间PGAS轻量级单边内存操作</p>
 ]]></content>
       <categories>
