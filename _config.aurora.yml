@@ -9,10 +9,10 @@
 #！ @docs https://aurora.tridiamond.tech/guide/configuration.html
 #! ---------------------------------------------------------------
 site:
-  subtitle: Rui's Blog
-  author: Rui
-  nick: 今天你吃了吗?
-  description: 阳光很好, 风也温柔
+  subtitle: Peleș
+  author: Gardenia
+  nick: Did you eat today?
+  description: People love what other people are passionate about.
   link: '/'
   language: cn
   multi_language: true
@@ -62,13 +62,29 @@ menu:
 #! @docs https://aurora.tridiamond.tech/guide/theme.html
 #! ---------------------------------------------------------------
 theme:
-  dark_mode: false
+  dark_mode: true
   profile_shape: diamond # support `circle`, `diamond`, `rounded`
   feature: true
   gradient:
-    color_1: '#f7797d'
-    color_2: '#FBD786'
-    color_3: '#C6FFDD'
+    # color_1: '#77A1D3'
+    # color_2: '#79CBCA'
+    # color_3: '#E684AE'
+
+    # color_1: '#FFE000'
+    # color_2: '#799F0C'
+    # color_3: '#00416A'
+
+    # color_1: '#f64f59'
+    # color_2: '#c471ed'
+    # color_3: '#12c2e9'
+
+    color_1: '#40E0D0'
+    color_2: '#FF8C00'
+    color_3: '#FF0080'
+
+    # color_1: '#2ebf91'
+    # color_2: '#6b6b83'
+    # color_3: '#8360c3'
 
 #! ---------------------------------------------------------------
 #! Social Configs

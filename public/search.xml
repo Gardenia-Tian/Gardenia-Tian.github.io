@@ -1,9 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Optimize Cache</title>
+    <url>//post/Optimize-Cache.html</url>
+    <content><![CDATA[<h1>缓存优化方案</h1>
+<p>这里总结一些现有的缓存优化方案, 当然还有很多其他的方案, 这里聚焦在我所不熟悉的部分.</p>
+<h2 id="pipelined-caches">Pipelined caches</h2>
+<p>实现缓存访问的流水化, 使第一级缓存命中的实际延迟可以分散到多个时钟周期, 从而缩短时钟周期时间, 提高带宽, 但会减缓命中速度.</p>
+<h2 id="multibanked-caches">Multibanked caches</h2>
+<p>将缓存划分成几个相互独立, 支持同时访问的缓存组.</p>
+<h2 id="merging-write-buffers">Merging write buffers</h2>
+<p>合并写缓冲区以降低缺失代价, 因为所有存储内容都必须发送到层次结构的下一层次, 所以直写缓存依赖于写缓冲区. 如果写缓冲区为空, 则数据和整个地址被写到缓冲区中, 从处理器的角度来看, 写入操作已经完成. 如果缓冲区中包含其他经过修改的块, 则检查它们的地址, 看新数据的地址是否与写缓冲区中有效项目地址匹配. 如果匹配, 则将新数据与这个项目合并在一起, 这种优化方法成为写合并.</p>
+<h2 id="hardware-prefetching">Hardware Prefetching</h2>
+<p>在处理器请求项目之前, 预先提取它们. 指令和数据都可以预取. 指令预取通常在缓存外部的硬件中完成,</p>
+<h2 id="compiler-optimizations">Compiler optimizations</h2>
+<p>这种技术可以在不改变任何硬件的情况下降低缺失率. 主要分成两个维度: 指令缺失性能改进和数据缺失性能改进.</p>
+<ol>
+<li>循环交换: 数据的连续性</li>
+<li>分块: 对于正交访问模式, 可以对子矩阵进行操作.其目的是在缓存中载入的数据被替换之前, 在最大限度上利用它.</li>
+</ol>
+<p>编译器优化还可以用来控制预取, 以降低缺失代价或缺失率</p>
+<p>作为硬件预取的替代方案, 可以在处理器需要某一数据之前, 由编译器插入请求该数据的预取指令:</p>
+<ol>
+<li>寄存器预取将数据值载入到一个寄存器中</li>
+<li>缓存预取仅将数据载入到缓存中, 而不是寄存器中</li>
+</ol>
+]]></content>
+      <categories>
+        <category>清浅录</category>
+      </categories>
+      <tags>
+        <tag>课程</tag>
+        <tag>体系结构</tag>
+        <tag>存储</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第一篇博客</title>
     <url>//post/%E5%90%AF%E7%A8%8B.html</url>
-    <content><![CDATA[<h1 id="年轻人的第一篇博客"><a href="#年轻人的第一篇博客" class="headerlink" title="年轻人的第一篇博客"></a>年轻人的第一篇博客</h1><p>GitHub的博客仓库很早就创立了, 但是拖了很久都没有部署. 总是因为各种原因退缩, 这次终于把界面什么的都配置了一下, 算是勉勉强强能看了, 还有很多功能还没有开发, 这些还需要日后一点一点探索, 不过有了GitHub博客也终于向一名合格的程序员迈进了一步, 希望以后能在这里记录一下自己的学习笔记, 日常心得, 生活碎片, 也希望能给浏览到博客的朋友带来一点点帮助.</p>
+    <content><![CDATA[<h1>年轻人的第一篇博客</h1>
+<p>GitHub的博客仓库很早就创立了, 但是拖了很久都没有部署. 总是因为各种原因退缩, 这次终于把界面什么的都配置了一下, 算是勉勉强强能看了, 还有很多功能还没有开发, 这些还需要日后一点一点探索, 不过有了GitHub博客也终于向一名合格的程序员迈进了一步, 希望以后能在这里记录一下自己的学习笔记, 日常心得, 生活碎片, 也希望能给浏览到博客的朋友带来一点点帮助.</p>
+<p><img src="/post/1.jpg" alt></p>
+]]></content>
+      <categories>
+        <category>陶然集</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Reproducibility Badges</title>
+    <url>//post/Reproducibility-Badges.html</url>
+    <content><![CDATA[<h1 id="Reproducibility-Badges"><a href="#Reproducibility-Badges" class="headerlink" title="Reproducibility Badges"></a>Reproducibility Badges</h1><p>最近SC22正在如火如荼地进行, 作为一个科研小白, 我也有简单地远程围观这次会议. 在阅读SC会议的论文的时候, 我们会发现论文上总是有三个圆形的小标志, 所以不禁好奇这个是个什么东西, 经过一番查阅资料这里简单一下这个标志的含义.</p>
+<p><img src="/post/Reproducibility-Badges/1.png"></p>
+<p>这三个标志是Reproducibility Badges, 也就是再现性徽章. ACM定义了几个再现性徽章，涵盖从轻到强的再现性参与的几个级别，</p>
+<h2 id="Artifacts-Evaluated"><a href="#Artifacts-Evaluated" class="headerlink" title="Artifacts Evaluated"></a>Artifacts Evaluated</h2><p>此徽章适用于相关工件已成功完成独立审核的论文。此徽章不需要公开物品。然而，它们确实需要提供给审阅者。区分了两个级别，在任何情况下只能应用其中一个级别.</p>
+<h3 id="Artifacts-Evaluated-–-Functional-v1-1"><a href="#Artifacts-Evaluated-–-Functional-v1-1" class="headerlink" title="Artifacts Evaluated – Functional v1.1"></a>Artifacts Evaluated – Functional v1.1</h3><p>与研究相关的人工制品被发现是有记录的、一致的、完整的、可操作的，并且包括适当的验证和确认证据.</p>
+<p><img src="https://www.acm.org/binaries/content/gallery/acm/publications/artifact-review-v1_1-badges/artifacts_evaluated_functional_v1_1.png" alt="img"></p>
+<h3 id="Artifacts-Evaluated-–-Reusable-v1-1"><a href="#Artifacts-Evaluated-–-Reusable-v1-1" class="headerlink" title="Artifacts Evaluated – Reusable v1.1"></a>Artifacts Evaluated – Reusable v1.1</h3><p>与论文相关的工件的质量大大超过了最小功能。也就是说，它们具有已评估工件的所有质量——功能级别，但除此之外，它们都经过了非常仔细的记录和良好的结构，以便于重用和重新调整用途。特别是，严格遵守研究界对这类文物的规范和标准。</p>
+<p><img src="https://www.acm.org/binaries/content/gallery/acm/publications/artifact-review-v1_1-badges/artifacts_evaluated_reusable_v1_1.png" alt="img"></p>
+<h2 id="Artifacts-Available"><a href="#Artifacts-Available" class="headerlink" title="Artifacts Available"></a>Artifacts Available</h2><p>此徽章适用于相关工件已永久可供检索的论文。</p>
+<h3 id="Artifacts-Available-v1-1"><a href="#Artifacts-Available-v1-1" class="headerlink" title="Artifacts Available v1.1"></a>Artifacts Available v1.1</h3><p>作者创建的与本文相关的工件已放置在可公开访问的档案库中。提供了指向该存储库的DOI或链接以及对象的唯一标识符。</p>
+<p><img src="https://www.acm.org/binaries/content/gallery/acm/publications/artifact-review-v1_1-badges/artifacts_available_v1_1.png" alt="img"></p>
+<h2 id="Results-Validated"><a href="#Results-Validated" class="headerlink" title="Results Validated"></a>Results Validated</h2><p>此徽章适用于作者以外的个人或团队成功获得论文主要结果的论文。区分两个级别.</p>
+<h3 id="Results-Reproduced-v1-1"><a href="#Results-Reproduced-v1-1" class="headerlink" title="Results Reproduced v1.1"></a>Results Reproduced v1.1</h3><p><img src="https://www.acm.org/binaries/content/gallery/acm/publications/artifact-review-v1_1-badges/results_reproduced_v1_1.png" alt="img"></p>
+<p>论文的主要结果是由作者以外的个人或团队进行的后续研究，部分使用作者提供的产品。</p>
+<h3 id="Results-Replicated-v1-1"><a href="#Results-Replicated-v1-1" class="headerlink" title="Results Replicated v1.1"></a>Results Replicated v1.1</h3><p>论文的主要结果是由作者以外的个人或团队在后续研究中独立获得的，没有使用作者提供的产品。</p>
+<p><img src="https://www.acm.org/binaries/content/gallery/acm/publications/artifact-review-v1_1-badges/results_replicated_v1_1.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>清浅录</category>
+      </categories>
+      <tags>
+        <tag>conference</tag>
+        <tag>SC</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RDMA技术解读</title>
+    <url>//post/RDMA%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%AF%BB.html</url>
+    <content><![CDATA[<h1 id="RDMA技术解读"><a href="#RDMA技术解读" class="headerlink" title="RDMA技术解读"></a>RDMA技术解读</h1><p>本文参考<a href="%5B%E6%8F%AD%E7%A7%98%E7%BD%91%E7%BB%9C%E6%8A%80%E6%9C%AF%E4%B8%AD%E7%9A%84%E2%80%9C%E7%88%B1%E9%A9%AC%E4%BB%95%E2%80%9D%EF%BC%8C12%E5%88%86%E9%92%9F%E7%9C%8B%E6%87%82RDMA_%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_bilibili%5D(https://www.bilibili.com/video/BV1ZY4y1L7Xq/?spm_id_from=333.337.search-card.all.click&vd_source=aad0e5152e96b4bf095d0017d639153b)">技术蛋老师讲解RDMA的视频</a>, <a href="%5B%E5%AD%A6%E4%B9%A0%E5%88%86%E4%BA%AB%EF%BC%9A%E6%B5%85%E8%B0%88RDMA%E6%8A%80%E6%9C%AF_%E5%93%94%E5%93%A9%E5%93%94%E5%93%A9_bilibili%5D(https://www.bilibili.com/video/BV1QL411G7wo/?spm_id_from=333.337.search-card.all.click&vd_source=aad0e5152e96b4bf095d0017d639153b)">It_server技术分享的视频</a>侵删</p>
+<h2 id="传统Socket通信"><a href="#传统Socket通信" class="headerlink" title="传统Socket通信"></a>传统Socket通信</h2><p><img src="/post/RDMA%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%AF%BB/image-20221118211738044.png" alt="image-20221118211738044"></p>
+<p>用户将应用发送出去, 需要先到操作系统内核, 再到网络接口, 然后在接收方收到信息再次经过操作系统内核, 并在用户态分析数据.</p>
+<h2 id="RDMA通信模式"><a href="#RDMA通信模式" class="headerlink" title="RDMA通信模式"></a>RDMA通信模式</h2><p><img src="/post/RDMA%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%AF%BB/image-20221118211907180.png" alt="image-20221118211907180"></p>
+<p>绕过内核态, 直接发送数据给硬件. 可以满足高带宽, 低延迟, 低CPU消耗的需求.</p>
+<p>RDMA可以释放CPU的负载, 减少数据拷贝, 内存访问, 实现零拷贝和内核旁路.</p>
+<ul>
+<li>零拷贝:应用程序能够直接执行数据传输, 无需涉及到网络软件栈的情况下, 数据能够被直接发送到缓冲区或者能够直接从缓冲区里被接收</li>
+<li>内核旁路: 应用程序可以直接在用户态执行数据传输, 不需要在内核态与用户态之间做上下文切换</li>
+</ul>
+<h3 id="IB"><a href="#IB" class="headerlink" title="IB"></a>IB</h3><p>RDMA的原生网络协议, 通过专用硬件实现最优的性能, 但是由于专用硬件的原因, InifiniBand要求从L到L4 需要使用自己专用的硬件, 设备成本非常高</p>
+<h3 id="RoCE"><a href="#RoCE" class="headerlink" title="RoCE"></a>RoCE</h3><p>RDMA跑在以太网上的一种网络, RoCE v1还没有摆脱Infiniband的束缚, RoCE v2使用UDP+IP, 既可以使用以太网交换机, 可以兼容现有以太网, IP协议使得数据可以被路由.</p>
+<p><img src="/post/RDMA%E6%8A%80%E6%9C%AF%E8%A7%A3%E8%AF%BB/image-20221118212411801.png" alt="image-20221118212411801"></p>
+<h3 id="iWARP"><a href="#iWARP" class="headerlink" title="iWARP"></a>iWARP</h3><p>可以更大规模的部署和组网, iWARP是基于TCP的, 传统的iWARP厂商实现时需要兼容的完整的协议栈, 设计和实现成本很高, 不需要交换机支持无损以太网传输, 虽然适用于当前的互联网传输, 但是性能比RoCE要差.</p>
+<p><img src="https://img-blog.csdnimg.cn/1b2704ac4511494e8c4c1348d7ad4529.png" alt="img"></p>
+]]></content>
+      <categories>
+        <category>清浅录</category>
+      </categories>
+      <tags>
+        <tag>体系结构</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为linux设置回收站</title>
+    <url>//post/%E4%B8%BAlinux%E8%AE%BE%E7%BD%AE%E5%9B%9E%E6%94%B6%E7%AB%99.html</url>
+    <content><![CDATA[<h1 id="为Linux设置回收站"><a href="#为Linux设置回收站" class="headerlink" title="为Linux设置回收站"></a>为Linux设置回收站</h1><p>昨天手快误删了一个很重要的文件夹, 经过一系列的操作最后发现确实是找不回来了, 所以痛定思痛一定要为Linux搭建一个回收站, 参考了网上很多教程, 现在来记录一下搭建过程.</p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>原理其实很简单, 就是自定义一个回收站文件夹, 然后将删除指令自定义成将文件移动到回收站里, 再设置一个定时来定期清空回收站文件夹.</p>
+<h2 id="操作流程"><a href="#操作流程" class="headerlink" title="操作流程"></a>操作流程</h2><h3 id="创建回收站文件夹"><a href="#创建回收站文件夹" class="headerlink" title="创建回收站文件夹"></a>创建回收站文件夹</h3><p>我把回收站创建在我的账号的根目录下了, 并且希望平时隐藏, 所以指令如下</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> ~/.trash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="回收站相关的命令进行定义"><a href="#回收站相关的命令进行定义" class="headerlink" title="回收站相关的命令进行定义"></a>回收站相关的命令进行定义</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> ~/.bashrc_trash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>创建好<code>bashrc_trash</code>文件之后, 在里面添加如下内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 为rm重定位为trash的命令, 当执行rm的时候自动执行trash函数</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">rm</span><span class="token operator">=</span>trash
+<span class="token comment"># 同上</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">r</span><span class="token operator">=</span>trash
+<span class="token comment"># 列出回收站的内容</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">rl</span><span class="token operator">=</span><span class="token string">'ls ~/.trash'</span>
+<span class="token comment"># 撤销删除</span>
+<span class="token builtin class-name">alias</span> <span class="token assign-left variable">ur</span><span class="token operator">=</span>undelfile
+
+<span class="token comment"># 撤销删除, 就是将回收站中的内容移动回去</span>
+<span class="token function-name function">undelfile</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+ <span class="token function">mv</span> <span class="token parameter variable">-i</span> ~/.trash/<span class="token punctuation">\</span><span class="token variable">$@</span> ./
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 删除, 就是将当前文件夹移到回收站里, 注意mv指令没有-r参数, 所以使用的时候不用rm -rf, 直接rm -f或者rm就可以</span>
+<span class="token function-name function">trash</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+ <span class="token function">mv</span> <span class="token variable">$@</span> ~/.trash/
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 清空回收站, 添加确认操作</span>
+<span class="token function-name function">cleartrash</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+ <span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"clear sure?[n]"</span> confirm<span class="token punctuation">;</span>
+ <span class="token punctuation">[</span> <span class="token variable">$confirm</span> <span class="token operator">==</span> <span class="token string">'y'</span> <span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">[</span> <span class="token variable">$confirm</span> <span class="token operator">==</span> <span class="token string">'Y'</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> /bin/rm <span class="token parameter variable">-rf</span> ~/.trash/*
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment"># 不需要确认的清空回收站, 用于定时清空, 事实上也可以给cleartrash()配一个参数, 这个以后要是有时间可以再搞一下</span>
+<span class="token function-name function">CLEARTRASH</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+ /bin/rm <span class="token parameter variable">-rf</span> ~/.trash/*
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="将自定义的指令添加到-bashrc"><a href="#将自定义的指令添加到-bashrc" class="headerlink" title="将自定义的指令添加到.bashrc"></a>将自定义的指令添加到.bashrc</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> ~/.bashrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>打开<code>~/.bashrc</code>之后在其中添加如下指令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># add trash</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-f</span> <span class="token string">"~/.bashrc_trash"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+    <span class="token builtin class-name">.</span> ~/.bashrc_trash
+<span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样每次启动一个终端就会自动加载我们自定义的指令</p>
+<h3 id="定期清空文件夹"><a href="#定期清空文件夹" class="headerlink" title="定期清空文件夹"></a>定期清空文件夹</h3><p>其实到上一步就已经可以使用回收站了, 但是我们希望回收站更完善一点, 能够定时清空回收站, 这样就不用我们手动管理回收站中的内容了, 所以再设置一个定时清空功能. 这个功能要用到<code>crontab </code>指令, Linux <code>crontab</code> 是用来定期执行程序的命令, <code>-e</code>参数可以执行文字编辑器来设定时程表。首先输入如下指令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> <span class="token parameter variable">-e</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p> 之后会进入到&#x2F;tmp&#x2F;crontab.xFcuCa&#x2F;crontab, 这个如果不指定用户默认是为自己的用户配置的.</p>
+<p>之后在里面添加</p>
+<pre class="line-numbers language-shel" data-language="shel"><code class="language-shel">0 0 * * 0 CLEARTRASH<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这句话的含义是每周日零点清空回收站, 前面的五位数字用来指定时间, 含义如下</p>
+<pre class="line-numbers language-none"><code class="language-none">*    *    *    *    *
+-    -    -    -    -
+|    |    |    |    |
+|    |    |    |    +----- 星期中星期几 (0 - 6) (星期天 为0)
+|    |    |    +---------- 月份 (1 - 12) 
+|    |    +--------------- 一个月中的第几天 (1 - 31)
+|    +-------------------- 小时 (0 - 23)
++------------------------- 分钟 (0 - 59)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>那么到此位置我们回收站的配置就完成了, 其实还有更好的方式, 可以让回收站定期清空指定日期以前的数据, 这样安全性会更好一点, 如果以后有时间, 我们就再折腾一下那个方案, 现在的版本也可以实现一个较为安全的<code>rm</code>操作, 妈妈再也不用担心我手快啦!</p>
+]]></content>
+      <categories>
+        <category>清浅录</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>系统管理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2022-11-22随笔</title>
+    <url>//post/2022-11-22%E9%9A%8F%E7%AC%94.html</url>
+    <content><![CDATA[<h1 id="22-11-22随笔"><a href="#22-11-22随笔" class="headerlink" title="22-11-22随笔"></a>22-11-22随笔</h1><p>最近有一点点不开心, 觉得自己的状态特别拧巴. 课题被同学批评，说问题没有想清楚，怎么做，做什么都没有搞清楚就贸然上手了。说自己搞这个很难出成果，而且基本做不下去，总之就是各种被批评。更难受的是我不知道怎么反驳他们，我很想为自己的课题争取，为他辩解，但是我什么也说不出来，我只觉得他们说的对。我想我应该把不懂的地方问出来，可是又不好意思又不敢。我应该静下心来好好想想同学们的意见，可是心里满满的都是大家的批评，又不能好好去思考究竟是哪里的问题。</p>
+<p>所以就陷入了这样非常拧巴的状态：<font style="background-color:#8bc34a">觉得应该动手去改但是又不真正的去行动；只能坐在这里焦虑不断内耗。</font></p>
+<p>昨天和同学们聊了一下现在这种状态，大家也是各种安慰，告诉我明天会好的，但是自己觉得心里一直都没有想清楚，我找不到问题的根源，我没办法解决这种心态。仔细想想自己这样的状态应该是因为：</p>
+<ol>
+<li>被批评了，心里不开心</li>
+<li>想得太多而做的太少，导致想反驳但是肚子里没有墨水，反驳不出来</li>
+<li>觉得大家说的很对，这个课题做不下去，但是也没有新课题可以做，时间又很紧张了，担心自己毕不了业</li>
+<li>觉得自己不是科研这块料，觉得身边的人都太强了，我不配待在这，我插不上他们的话，他们说的我都不懂，我什么也不会</li>
+<li>明明什么都不会，还装出一副什么都会的样子，想问又不问，故作一副大佬的样子，其实外强中干</li>
+</ol>
+<p>那现在就来分析一下每一点，争取解决问题，从最好分析的开始：</p>
+<ul>
+<li><p>第二点：其实解决方案已经列出来了，想的太多而做的太少。想的多了，问题就多了；做的多了，答案就多了。既然觉得可做，既然觉得有办法，那就去做，去动手，去实践，既然觉得他们不对，那就努力去辩驳，去为自己发声！</p>
+</li>
+<li><p>第四点：还是自己内心戏太足了，只是被批评了一下，有什么就不是这块料的地方呢，以后路还长着呢，怎么能因为一点小挫折就放弃呢。而且大部分人还没有努力到要拼天赋的地步，等你足够努力然后发现自己还是不够敏锐再来评价自己是不是科研这块料，如果你不够努力，你会发现自己不是任何一块料。</p>
+</li>
+<li><p>第三点：和第二点同解。但是这一点还多了一种心理的因素。但是永远要牢记，学习是为了快乐。<code>学习本身就是足够幸福的过程，享受知识的同时，不要畏惧挑战。</code>各种毕业的评价标准，本质是由整个社会制定的残酷淘汰标准，它可以要求很多人，但如果你不在意，那它也没那么重要。<code>与探索未知的美妙相比，世界上大部分噩运，都不再重要。</code>所以，不管这条路走不走得通，能不能可行，其实也没有那么重要，你做出了重要的探索，这一路上的风景，你都没有错过。</p>
+</li>
+<li><p>第一点：哪有不被批评的呢。要不是他们，你也不会这样审视自己，也不会更加坚定自己的想法，也不会更加明确问题的方向，要是没有批评，你现在还在浑浑噩噩无所事事呢，多亏了他们，才没让你偏航太远。</p>
+</li>
+<li><p>第五点：这一点的答案是和同学的聊天中找到的。我现在还是一个二十多岁的年轻人，是一个刚上研一的学生，以前没有科研经历，没有竞赛经历，没读过什么论文，没什么实习经验，什么都不会，实在太正常了。究竟是什么让我觉得自己很厉害呢？究竟是什么让我觉得自己高人一等呢？不能放低自己的姿态，永远以一副高高在上的状态，那就只能永远什么也学不到。放低自己的姿态，允许自己犯错，因为自己本身就不是什么很厉害的人，但这不丢人，因为自己扎实地走在成为很厉害的人的路上。二十多岁什么都不会，总好过三十多岁什么都不会。</p>
+<p>这就好像达克尔效应描述的一样：越是无知的人就越自信。当一个人知识越来越多，自信心会下降，但是突破临界点以后，自信心会回升，但之后不论怎么回升，都不如一开始一无所知时那么自信。即越是知识丰富的人越能意识到自己的不足，也越能发现、承认与学习别人的优点。</p>
+</li>
+</ul>
+<p><img src="/post/2022-11-22%E9%9A%8F%E7%AC%94/22-11-22%E9%9A%8F%E7%AC%94.jpg" alt="22-11-22随笔"></p>
+<p>或许现在就是自己走向<em>绝望之谷</em>的过程，也可能是在走向<em>愚昧之巅</em>的过程，但是无论如何，要知道自己的能力是在提升的。我更希望现在的状态是走向<em>绝望之谷</em>的过程，因此，勇于接受自己的无知，勇于向他人学习，才是你应该做的，这个过程，就是成长的过程啊。</p>
+<p>所以，加油呀，就像博客的简介那样，是La La Land里的一句台词</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>People love what other people are passionate about.                   ——《La La Land》</p></blockquote>
 ]]></content>
       <categories>
         <category>陶然集</category>

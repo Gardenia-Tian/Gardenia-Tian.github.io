@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 沁芳园
-subtitle: '绕堤柳借三篙翠，隔岸花分一脉香'
+title: Peleș
+subtitle: People love what other people are passionate about.
 description: ''
 keywords:
-author: Rui
+author: Gardenia
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -98,10 +98,15 @@ include:
 exclude:
 ignore:
 
+# show description
+excerpt_description: true
+
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: aurora
+# theme: ayer
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
