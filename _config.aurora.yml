@@ -78,9 +78,13 @@ theme:
     # color_2: '#c471ed'
     # color_3: '#12c2e9'
 
-    color_1: '#40E0D0'
-    color_2: '#FF8C00'
-    color_3: '#FF0080'
+    # color_1: '#40E0D0'
+    # color_2: '#FF8C00'
+    # color_3: '#FF0080'
+    
+    color_1: '#c9ffbf'
+    color_2: '#C5C1FF'
+    color_3: '#57E9F2'
 
     # color_1: '#2ebf91'
     # color_2: '#6b6b83'

@@ -233,4 +233,21 @@
         <tag>随笔</tag>
       </tags>
   </entry>
+  <entry>
+    <title>rCUDA学习笔记</title>
+    <url>//post/rCUDA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</url>
+    <content><![CDATA[<h1 id="rCUDA学习笔记"><a href="#rCUDA学习笔记" class="headerlink" title="rCUDA学习笔记"></a>rCUDA学习笔记</h1><h2 id="工作背景"><a href="#工作背景" class="headerlink" title="工作背景"></a>工作背景</h2><p>人CUDA是巴仑西亚理工大学和西班牙海梅一世大学开发的一个工作, 到现在已经有十余年的历史, 并且目前仍在维护. 欧洲的很多工作都是这样子默默无闻, 但是能坚持开发很久的工作, 并且在很久以后突然产生它的用途被大家所瞩目, 这一点真的很值得敬佩. 感觉这样的精神就是我所理解的学者精神.</p>
+<h2 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h2><p>核心思想是类似远程过程调用, 将使用GPU的核函数发送到远程的GPU端供GPU使用, 这样做主要的开销在数据传输的通信上, 作者在文中对数据传输部分做了很大的优化. 但最终的运行效果差强人意, 相对于本地未初始化的节点表现得还挺好的, 但是如果本地已经初始化, 远程还是比不过本地的, </p>
+<p><img src="/post/rCUDA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/image-20221210105200418.png" alt="image-20221210105200418"></p>
+<p>不过思想还是可以借鉴, 将GPU任务发送给目标进程执行, 减少显存的占用同时实现隔离, 但是这样扩展性仍然受限, 有多少个GPU就有多少个进程, 这些进程之间并行执行, 但是进程内部是串行的.</p>
+]]></content>
+      <categories>
+        <category>索道集</category>
+      </categories>
+      <tags>
+        <tag>体系结构</tag>
+        <tag>GPU</tag>
+        <tag>CUDA</tag>
+      </tags>
+  </entry>
 </search>
