@@ -288,4 +288,53 @@
         <tag>随笔</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Ray学习笔记</title>
+    <url>//post/Ray%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.html</url>
+    <content><![CDATA[<h1>Ray学习笔记</h1>
+<h2 id="概念">概念</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tasks</td>
+<td>在Ray中, 任务是很轻量级的, 一个task指的实际上是一个remote函数</td>
+</tr>
+<tr>
+<td>worker</td>
+<td>可以理解成一个python进程</td>
+</tr>
+<tr>
+<td>actors</td>
+<td>将task从函数扩展到了类, 当创建一个actor的时候, 同时还会创建一个新的worker, 类的方法被绑定在这个特定的worker上, worker可以访问和修改类的状态</td>
+</tr>
+<tr>
+<td>objects</td>
+<td>一个worker或者一个actor实例被创建出来之后就变成了object, 这些object可以存在在集群中的任何位置, 可以通过ref来访问</td>
+</tr>
+<tr>
+<td>placement groups</td>
+<td>允许用户跨多个节点自动保留资源, 往往用于两种情况:<br>(1)组调度, 我们需要一组任务同时开始; (2)最大化数据局部性, 减少数据移动的开销</td>
+</tr>
+<tr>
+<td>environment dependencies</td>
+<td>因为tasks或者actors可能在环境中的任何一个节点执行, 所以需要解决不同节点之间的环境依赖问题, 这个问题要么要用户提前在节点上都准备好需要的环境, 或者使用Ray的<a href="https://docs.ray.io/en/latest/ray-core/handling-dependencies.html#runtime-environments">runtime environments</a>动态安装这些环境.</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+      <categories>
+        <category>索道集</category>
+      </categories>
+      <tags>
+        <tag>体系结构</tag>
+        <tag>系统管理</tag>
+        <tag>计算框架</tag>
+      </tags>
+  </entry>
 </search>
