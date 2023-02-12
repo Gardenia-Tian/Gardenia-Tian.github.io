@@ -391,4 +391,19 @@
         <tag>人工智能</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Nsight Compute使用不完全记录</title>
+    <url>//post/Nsight-Compute%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%AE%8C%E5%85%A8%E8%AE%B0%E5%BD%95.html</url>
+    <content><![CDATA[<h1 id="Nsight-Compute使用不完全记录"><a href="#Nsight-Compute使用不完全记录" class="headerlink" title="Nsight Compute使用不完全记录"></a>Nsight Compute使用不完全记录</h1><p>Nsight System是Nvidai推出的一款性能分析工具,  对于高性能计算工作者来说是一个分析利器. 但是网上并没有找到非常清晰的使用指南, 官方文档虽然书写的很清晰, 但是内容过于繁杂, 所以这里记录一下自己的使用经历, 方便自己以后的使用的同时, 希望能给其他朋友做一个参考.</p>
+]]></content>
+      <categories>
+        <category>清浅集</category>
+      </categories>
+      <tags>
+        <tag>GPU</tag>
+        <tag>性能测试</tag>
+        <tag>profile</tag>
+        <tag>roofline</tag>
+      </tags>
+  </entry>
 </search>
