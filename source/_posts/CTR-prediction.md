@@ -3,7 +3,7 @@ title: CTR prediction
 date: 2023-02-09 19:33:09
 tags: [推荐系统, 机器学习, 神经网络, 人工智能]
 categories: [索道集]
-ccover: https://pica.zhimg.com/v2-9cf5d7450dc336709ed1e5d82320b173_1440w.jpg?source=172ae18b
+cover: https://github.com/PaddlePaddle/PaddleRec/raw/master/doc/imgs/rec-overview.png
 typora-root-url: CTR-prediction
 ---
 
