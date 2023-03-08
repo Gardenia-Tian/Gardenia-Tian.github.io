@@ -1069,4 +1069,111 @@ int main() &#123;
         <tag>编程</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Pytorch多Stream管理</title>
+    <url>//post/Pytorch%E5%A4%9AStream%E7%AE%A1%E7%90%86.html</url>
+    <content><![CDATA[<p>import shutil</p>
+<p>import torch</p>
+<p>import torch.nn as nn</p>
+<p>import torch.nn.functional as F</p>
+<p>class ModelBaseline(nn.Module):</p>
+<p>​    def <strong>init</strong>(self, d, n=4):</p>
+<p>​        super().<strong>init</strong>()</p>
+<p>​        self.norm = nn.LayerNorm(d)</p>
+<p>​        self.linear1 = nn.Linear(d, d * n)</p>
+<p>​        self.linear2 = nn.Linear(d * 4, d)</p>
+<p>​        self.offload_stream = torch.cuda.Stream()</p>
+<p>​    def forward(self, src: torch.Tensor):</p>
+<p>​        x = self.norm(src)</p>
+<p>​        src = <a href="http://src.to">src.to</a>(device=‘cpu’, non_blocking=True)</p>
+<p>​        x = self.linear2(F.relu(self.linear1(x)))</p>
+<p>​        src = <a href="http://src.to">src.to</a>(device=‘cuda’, non_blocking=True)</p>
+<p>​        return src + x</p>
+<p>class ModelWaitStream(nn.Module):</p>
+<p>​    def <strong>init</strong>(self, d, n=4):</p>
+<p>​        super().<strong>init</strong>()</p>
+<p>​        self.norm = nn.LayerNorm(d)</p>
+<p>​        self.linear1 = nn.Linear(d, d * n)</p>
+<p>​        self.linear2 = nn.Linear(d * 4, d)</p>
+<p>​        self.offload_stream = torch.cuda.Stream()</p>
+<p>​    def forward(self, src: torch.Tensor):</p>
+<p>​        x = self.norm(src)</p>
+<p>​        self.offload_stream.wait_stream(torch.cuda.current_stream())</p>
+<p>​        with torch.cuda.stream(self.offload_stream):</p>
+<p>​            src = <a href="http://src.to">src.to</a>(device=‘cpu’, non_blocking=True)</p>
+<p>​        x = self.linear2(F.relu(self.linear1(x)))</p>
+<p>​        with torch.cuda.stream(self.offload_stream):</p>
+<p>​            src = <a href="http://src.to">src.to</a>(device=‘cuda’, non_blocking=True)</p>
+<p>​            evt_2 = self.offload_stream.record_event()</p>
+<p>​        torch.cuda.current_stream().wait_stream(self.offload_stream)</p>
+<p>​        return src + x</p>
+<p>class ModelWaitEvent(nn.Module):</p>
+<p>​    def <strong>init</strong>(self, d, n=4):</p>
+<p>​        super().<strong>init</strong>()</p>
+<p>​        self.norm = nn.LayerNorm(d)</p>
+<p>​        self.linear1 = nn.Linear(d, d * n)</p>
+<p>​        self.linear2 = nn.Linear(d * 4, d)</p>
+<p>​        self.offload_stream = torch.cuda.Stream()</p>
+<p>​    def forward(self, src: torch.Tensor):</p>
+<p>​        x = self.norm(src)</p>
+<p>​        evt_1 = torch.cuda.current_stream().record_event()</p>
+<p>​        with torch.cuda.stream(self.offload_stream):</p>
+<p>​            self.offload_stream.wait_event(evt_1)</p>
+<p>​            src = <a href="http://src.to">src.to</a>(device=‘cpu’, non_blocking=True)</p>
+<p>​        x = self.linear2(F.relu(self.linear1(x)))</p>
+<p>​        with torch.cuda.stream(self.offload_stream):</p>
+<p>​            src = <a href="http://src.to">src.to</a>(device=‘cuda’, non_blocking=True)</p>
+<p>​            evt_2 = self.offload_stream.record_event()</p>
+<p>​        torch.cuda.current_stream().wait_event(evt_2)</p>
+<p>​        return src + x</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>源码编译pytorch踩坑记录</title>
+    <url>//post/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91pytorch%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95.html</url>
+    <content><![CDATA[<h1>源码编译Pytorch踩坑记录</h1>
+<h3 id="获取pytorch源码">获取pytorch源码</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda <span class="token function">install</span> mkl mkl-include
+<span class="token comment"># CUDA only: Add LAPACK support for the GPU if needed</span>
+conda <span class="token function">install</span> <span class="token parameter variable">-c</span> pytorch magma-cuda113  <span class="token comment"># or the magma-cuda* that matches your CUDA version from https://anaconda.org/pytorch/repo</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这一步都还没有什么问题, 接下来按照官网的指南执行</p>
+<h3 id="install-pytorch">Install Pytorch</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">CMAKE_PREFIX_PATH</span><span class="token operator">=</span><span class="token variable">$&#123;CONDA_PREFIX<span class="token operator">:-</span>"$(dirname $(which conda))<span class="token operator">/</span>..<span class="token operator">/</span>"&#125;</span>
+python setup.py develop<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>开始报错</p>
+<h4 id="error-inlining-failed-in-call-to-always-inline-mm256-set1-ps-target-specific-option-mismatch">error: inlining failed in call to always_inline ‘_mm256_set1_ps’: target specific option mismatch</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">CFLAGS</span><span class="token operator">=</span><span class="token string">"-mfma"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>重新编译一遍发现这个错误不见了, 但是类似的还在,如<code>error: inlining failed in call to always_inline ‘_mm256_abs_epi16’: target specific option mismatch</code>. 所以感觉这个问题不是根本问题, 继续检索错误文件, 发现了这个问题<code>cc: error: /arch:AVX512: No such file or directory</code>.感觉这个地方才是本质问题, 所以先看这里, 参考<a href="https://stackoverflow.com/questions/57043592/compilation-error-for-avx512-is-it-a-gcc-issue">这篇文章</a>, 尝试以下指令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">CFLAGS</span><span class="token operator">=</span><span class="token string">"-mavx512f"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>重新编译发现错误变少了, 但是<code>cc: error: /arch:AVX512: No such file or directory</code>这个报错还在</p>
+<p>尝试了很多方法都不行, 最后查了一下, 应该是电脑不支持avx512指令集, 可以用<code>cat /proc/cpuinfo | grep avx512</code>指令查看一下, 我的电脑上没有, 所以一直报错. 在set.py文件里可以看到这样的一段话</p>
+<blockquote><span class="custom-blockquote-svg"><svg width="24" height="24" viewBox="0 0 24 24" fill="" xmlns="http://www.w3.org/2000/svg" data-reactroot="">
+<path fill="" d="M22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C13.8 22 15.5 21.5 17 20.6L22 22L20.7 17C21.5 15.5 22 13.8 22 12Z" undefined="1"></path>
+<path fill="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z" undefined="1"></path>
+<path fill="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z" undefined="1"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M17 8.5C15.23 8.97 14.07 10.84 14.01 13.27C14 13.33 14 13.4 14 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M9 8.5C7.23 8.97 6.07 10.84 6.01 13.27C6 13.33 6 13.4 6 13.47V13.5"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M15.97 11.5H16.04C17.12 11.5 18 12.38 18 13.47V13.53C18 14.62 17.12 15.5 16.03 15.5H15.96C14.88 15.5 14 14.62 14 13.53V13.46C14 12.38 14.88 11.5 15.97 11.5Z"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" stroke="" d="M7.97 11.5H8.04C9.12 11.5 10 12.38 10 13.47V13.53C10 14.62 9.12 15.5 8.03 15.5H7.97C6.88 15.5 6 14.62 6 13.53V13.46C6 12.38 6.88 11.5 7.97 11.5Z"></path>
+</svg>
+</span><p>ATEN_AVX512_256=TRUE<br>
+ATen AVX2 kernels can use 32 ymm registers, instead of the default 16.<br>
+This option can be used if AVX512 doesn’t perform well on a machine.<br>
+The FBGEMM library also uses AVX512_256 kernels on Xeon D processors,<br>
+but it also has some (optimized) assembly code.</p></blockquote>
+<p>把这个环境变量改成false试了一下好像也不行, 最后无奈换了个设备重新编译</p>
+<h3 id="error-use-of-fmt-before-deduction-of-auto">error: use of ‘fmt::…’ before deduction of ‘auto’</h3>
+<p><img src="/post/image-20230307102419154.png" alt="image-20230307102419154"></p>
+<p>在新的设备上构建cmakelists的时候没有什么问题, 但是编译的时候一直报这个错. 看路径是third_party里面的fmt这个包的问题, 但是我进入到这个包目录下cmake, make, make install 都是没有问题的.</p>
+<p>最后是因为编译器版本的问题, 给gcc升级从6.5.0到8.4.0就可以了.</p>
+<h3 id="终极解决方案">终极解决方案</h3>
+<p>中间还经历了各种奇奇怪怪的问题, 但是最后都是用这个方法一下子解决的. 看到github上有人和我遇到了同样问题, 最后是重新fetch最新代码解决的, 我就也重新fetch了一下, 然后代码直接覆盖掉了之前的所有更改, 什么都不用做就全部编译通过了. 所以记录一下, 以后遇到类似的问题记得先检查<code>git clone --recursive</code>有没有成功, 之后一定要确保是最新的代码.</p>
+]]></content>
+      <categories>
+        <category>清浅集</category>
+      </categories>
+      <tags>
+        <tag>pytorch</tag>
+      </tags>
+  </entry>
 </search>
